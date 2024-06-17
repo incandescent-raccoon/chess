@@ -1,7 +1,7 @@
 let legalSquares = [];
 const boardSquares = document.getElementsByClassName("square");
 const pieces = document.getElementsByClassName("piece");
-const piecesmages = document.getElementsByTagName("img");
+const piecesImages = document.getElementsByTagName("img");
 
 setupBoardSquares();
 setupPieces();
@@ -35,4 +35,14 @@ function allowDrop(ev) {
 
 function drag(ev) {
     const piece = ev.target;
+    ev.dataTransfer.setData("text", piece.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    let data = ev.dataTransfer.getData("text");
+    const piece = document.getElementById(data);
+    const destinationSquare = ev.currentTarget;
+    let destinationSquareId = destinationSquare.id;
+    destinationSquare.appendChild(piece); 
 }
