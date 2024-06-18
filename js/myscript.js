@@ -1,4 +1,5 @@
 let legalSquares = [];
+let isWhiteTurn = true;
 const boardSquares = document.getElementsByClassName("square");
 const pieces = document.getElementsByClassName("piece");
 const piecesImages = document.getElementsByTagName("img");
@@ -43,8 +44,13 @@ function allowDrop(ev) {
 function drag(ev) {
     //ev.target is the <div>  </div> only. not the <img> inside.
     const piece = ev.target;
-    //set data of text to piece id. Later will access this in drop
-    ev.dataTransfer.setData("text", piece.id);
+    //get piece color
+    const pieceColor = piece.getAttribute("color");
+    if ((isWhiteTurn && pieceColor == "white") || (!isWhiteTurn && pieceColor == "black")) {
+        //set data of text to piece id. Later will access this in drop
+        ev.dataTransfer.setData("text", piece.id);
+    } 
+    
 
 }
 
@@ -61,7 +67,30 @@ function drop(ev) {
     const destinationSquare = ev.currentTarget;
     //access Square Id. thus we change the div into to this new square. 
     let destinationSquareId = destinationSquare.id;
-    //appendChild piece => move the div of the piece in to this new square div (with square Id)
-    destinationSquare.appendChild(piece); 
+    //check if the destination already have pieces? If yes what color ?
+    if (isSquareOccupied(destinationSquare) == "blank") {
+        //appendChild piece => move the div of the piece in to this new square div (with square Id)
+        destinationSquare.appendChild(piece); 
+        //change turn
+        isWhiteTurn = !isWhiteTurn;
+        return;
+    } else {
+        //check if destination square have a piece. then remove the piece there first
+        while (destinationSquare.firstChild) {
+            destinationSquare.removeChild(destinationSquare.firstChild);
+        }
+        //move the later piece to the square
+        destinationSquare.appendChild(piece);
+        isWhiteTurn = !isWhiteTurn;
+        return;
+    }
+    
 
+}
+
+function isSquareOccupied(square) {
+    if (square.querySelector(".piece")) {
+        const color = square.querySelector(".piece").getAttribute("color");
+        return color;
+    } else return "blank";
 }
