@@ -67,20 +67,51 @@ function drop(ev) {
     const destinationSquare = ev.currentTarget;
     //access Square Id. thus we change the div into to this new square. 
     let destinationSquareId = destinationSquare.id;
+
+    //original code work not so fine so got corrected
+
     //check if the destination already have pieces? If yes what color ?
-    if (isSquareOccupied(destinationSquare) == "blank") {
-        //appendChild piece => move the div of the piece in to this new square div (with square Id)
-        destinationSquare.appendChild(piece); 
-        //change turn
-        isWhiteTurn = !isWhiteTurn;
+    // if (isSquareOccupied(destinationSquare) == "blank") {
+    //     //appendChild piece => move the div of the piece in to this new square div (with square Id)
+    //     destinationSquare.appendChild(piece); 
+    //     console.log(piece.getAttribute("color"));
+    //     //change turn
+    //     isWhiteTurn = !isWhiteTurn;
+    //     return;
+    // } 
+    // if (isSquareOccupied(destinationSquare) != "blank") {
+    //     //check if destination square have a piece. then remove the piece there first
+    //     while (destinationSquare.firstChild) {
+    //         destinationSquare.removeChild(destinationSquare.firstChild);
+    //     }
+    //     //move the later piece to the square
+    //     destinationSquare.appendChild(piece);
+    //     isWhiteTurn = !isWhiteTurn;
+    //     return;
+    // }
+
+
+    //check turn prevent error
+    if (!piece) {
+        console.log("not ur dumb turn");
+        return;
+    }
+
+    //if the square has piece and = color vs the piece moving => dumb 
+    if (isSquareOccupied(destinationSquare) == piece.getAttribute("color")) {
+        console.log("u dumb");
         return;
     } else {
-        //check if destination square have a piece. then remove the piece there first
-        while (destinationSquare.firstChild) {
-            destinationSquare.removeChild(destinationSquare.firstChild);
+        //correct move (either no piece in square or piece with different color)
+        if (destinationSquare.firstElementChild) {
+            //which piece take which piece
+            console.log(piece.getAttribute("color"), " take ", isSquareOccupied(destinationSquare));
+            //remove the piece taken
+            destinationSquare.removeChild(destinationSquare.firstElementChild);
         }
-        //move the later piece to the square
+        //put the other piece into the square
         destinationSquare.appendChild(piece);
+        //change turn
         isWhiteTurn = !isWhiteTurn;
         return;
     }
