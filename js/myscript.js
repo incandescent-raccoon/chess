@@ -61,7 +61,10 @@ function drop(ev) {
     let data = ev.dataTransfer.getData("text");
     //track back to the piece with Id 
     const piece = document.getElementById(data);
-
+    if (!piece) {
+        console.log("not ur dumb turn");
+        return;
+    }
     //currentTarget is boardSquare[i] we set up earlier.
 
     const destinationSquare = ev.currentTarget;
@@ -90,12 +93,12 @@ function drop(ev) {
     //     return;
     // }
 
-
-    //check turn prevent error
-    if (!piece) {
-        console.log("not ur dumb turn");
+    if(!checkLegalMove(piece.getAttribute("id"), destinationSquare.getAttribute("id")) && piece.getAttribute("id").includes("rook")) {
+        console.log("ur rook dumb"); 
         return;
     }
+    //check turn prevent error
+    
 
     //if the square has piece and = color vs the piece moving => dumb 
     if (isSquareOccupied(destinationSquare) == piece.getAttribute("color")) {
@@ -124,4 +127,10 @@ function isSquareOccupied(square) {
         const color = square.querySelector(".piece").getAttribute("color");
         return color;
     } else return "blank";
+}
+
+function checkLegalMove(pieceId, squareId) {
+    if (pieceId.includes("rook") && (pieceId[pieceId.length - 1] == squareId[squareId. length - 1] || pieceId[pieceId.length - 2] == squareId[squareId. length - 2])) {
+        return true;
+    }
 }
