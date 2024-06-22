@@ -114,6 +114,10 @@ function drop(ev) {
         }
         //put the other piece into the square
         destinationSquare.appendChild(piece);
+        let updateId = piece.getAttribute("id");
+        updateId = updateId.split(0,updateId.length-2);
+        updateId += destinationSquare.getAttribute("id");
+        piece.setAttribute("id",updateId);
         //change turn
         isWhiteTurn = !isWhiteTurn;
         return;
@@ -130,7 +134,10 @@ function isSquareOccupied(square) {
 }
 
 function checkLegalMove(pieceId, squareId) {
-    if (pieceId.includes("rook") && (pieceId[pieceId.length - 1] == squareId[squareId. length - 1] || pieceId[pieceId.length - 2] == squareId[squareId. length - 2])) {
+    console.log(pieceId[pieceId.length - 1], " ", squareId[squareId.length - 1]);
+    console.log(pieceId[pieceId.length - 2], " ", squareId[squareId.length - 2]);
+
+    if ((pieceId[pieceId.length - 1] == squareId[squareId.length - 1] || pieceId[pieceId.length - 2] == squareId[squareId.length - 2])) {
         return true;
     }
 }
