@@ -70,7 +70,12 @@ function drop(ev) {
     const destinationSquare = ev.currentTarget;
     //access Square Id. thus we change the div into to this new square. 
     let destinationSquareId = destinationSquare.id;
+    //get piece type of piece
+    let pieceType = piece.getAttribute("id");
+    console.log(pieceType);
 
+    pieceType = pieceType.slice(0,pieceType.length-2);
+    console.log(pieceType);
     //original code work not so fine so got corrected
 
     //check if the destination already have pieces? If yes what color ?
@@ -92,32 +97,44 @@ function drop(ev) {
     //     isWhiteTurn = !isWhiteTurn;
     //     return;
     // }
-
-    if(!checkLegalMove(piece.getAttribute("id"), destinationSquare.getAttribute("id")) && piece.getAttribute("id").includes("rook")) {
-        console.log("ur rook dumb"); 
-        return;
+    switch (pieceType) {
+        case "rook":
+            if (!checkLegalMoveRook(piece.getAttribute("id"), destinationSquare.getAttribute("id"))) {
+                console.log("ur rook dumb"); 
+                return;
+            } else break;
+        case "bishop":
+            if (!checkLegalMoveBishop(piece.getAttribute("id"), destinationSquare.getAttribute("id"))) {
+                console.log("ur bishop dumb"); 
+                return;
+            } else break;
+        
     }
+    
     //check turn prevent error
     
-
+    console.log(destinationSquare.firstElementChild);
     //if the square has piece and = color vs the piece moving => dumb 
     if (isSquareOccupied(destinationSquare) == piece.getAttribute("color")) {
         console.log("u dumb");
         return;
     } else {
+        let takenPiece = destinationSquare.getElementsByClassName("piece");
+        console.log(takenPiece[0]);
         //correct move (either no piece in square or piece with different color)
-        if (destinationSquare.firstElementChild) {
+        if (takenPiece[0]) {
             //which piece take which piece
             console.log(piece.getAttribute("color"), " take ", isSquareOccupied(destinationSquare));
             //remove the piece taken
-            destinationSquare.removeChild(destinationSquare.firstElementChild);
+            //destinationSquare.removeChild(destinationSquare.firstElementChild);
+            destinationSquare.removeChild(takenPiece[0]);
         }
         //put the other piece into the square
         destinationSquare.appendChild(piece);
-        let updateId = piece.getAttribute("id");
-        updateId = updateId.split(0,updateId.length-2);
-        updateId += destinationSquare.getAttribute("id");
-        piece.setAttribute("id",updateId);
+        
+        pieceType += destinationSquare.getAttribute("id");
+        //pieceId after moving
+        piece.setAttribute("id",pieceType);
         //change turn
         isWhiteTurn = !isWhiteTurn;
         return;
@@ -133,11 +150,23 @@ function isSquareOccupied(square) {
     } else return "blank";
 }
 
-function checkLegalMove(pieceId, squareId) {
+function checkLegalMoveRook(pieceId, squareId) {
     console.log(pieceId[pieceId.length - 1], " ", squareId[squareId.length - 1]);
     console.log(pieceId[pieceId.length - 2], " ", squareId[squareId.length - 2]);
 
     if ((pieceId[pieceId.length - 1] == squareId[squareId.length - 1] || pieceId[pieceId.length - 2] == squareId[squareId.length - 2])) {
         return true;
-    }
+    } else return false;
+}
+
+function checkLegalMoveBishop(pieceId,squareId) {
+    console.log(pieceId[pieceId.length - 1], " ", squareId[squareId.length - 1]);
+    console.log(pieceId[pieceId.length - 2], " ", squareId[squareId.length - 2]);
+    
+    console.log(pieceId[pieceId.length-1]-squareId[squareId.length-1]);
+    console.log(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2));
+
+    if (Math.abs(pieceId[pieceId.length-1]-squareId[squareId.length-1]) == Math.abs(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2))) {
+        return true;
+    } else return false;
 }
