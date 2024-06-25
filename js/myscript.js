@@ -156,8 +156,7 @@ function isSquareOccupied(square) {
 }
 
 function checkLegalMoveRook(pieceId, squareId) {
-    console.log(pieceId[pieceId.length - 1], " ", squareId[squareId.length - 1]);
-    console.log(pieceId[pieceId.length - 2], " ", squareId[squareId.length - 2]);
+    
 
     if ((pieceId[pieceId.length - 1] == squareId[squareId.length - 1] || pieceId[pieceId.length - 2] == squareId[squareId.length - 2])) {
         return true;
@@ -165,11 +164,11 @@ function checkLegalMoveRook(pieceId, squareId) {
 }
 
 function checkLegalMoveBishop(pieceId,squareId) {
-    console.log(pieceId[pieceId.length - 1], " ", squareId[squareId.length - 1]);
-    console.log(pieceId[pieceId.length - 2], " ", squareId[squareId.length - 2]);
+    // console.log(pieceId[pieceId.length - 1], " ", squareId[squareId.length - 1]);
+    // console.log(pieceId[pieceId.length - 2], " ", squareId[squareId.length - 2]);
     
-    console.log(pieceId[pieceId.length-1]-squareId[squareId.length-1]);
-    console.log(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2));
+    // console.log(pieceId[pieceId.length-1]-squareId[squareId.length-1]);
+    // console.log(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2));
 
     if (Math.abs(pieceId[pieceId.length-1]-squareId[squareId.length-1]) == Math.abs(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2))) {
         return true;
@@ -177,11 +176,7 @@ function checkLegalMoveBishop(pieceId,squareId) {
 }
 
 function checkLegalMoveKnight(pieceId, squareId) {
-    console.log(pieceId[pieceId.length - 1], " ", squareId[squareId.length - 1]);
-    console.log(pieceId[pieceId.length - 2], " ", squareId[squareId.length - 2]);
-    console.log(pieceId[pieceId.length-1]-squareId[squareId.length-1]);
-    console.log(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2));
-    console.log()
+    
     // row = 1 and column = 2, row = 2 and column = 1 => Knight move
     if (Math.abs((pieceId[pieceId.length-1] - squareId[squareId.length-1]) * (pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2))) == 2) {
         return true;
