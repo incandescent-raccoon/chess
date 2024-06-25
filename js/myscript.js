@@ -108,6 +108,11 @@ function drop(ev) {
                 console.log("ur bishop dumb"); 
                 return;
             } else break;
+        case "knight":
+            if (!checkLegalMoveKnight(piece.getAttribute("id"),destinationSquare.getAttribute("id"))) {
+                console.log("ur knight dumb");
+                return;
+            } else break;
         
     }
     
@@ -167,6 +172,18 @@ function checkLegalMoveBishop(pieceId,squareId) {
     console.log(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2));
 
     if (Math.abs(pieceId[pieceId.length-1]-squareId[squareId.length-1]) == Math.abs(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2))) {
+        return true;
+    } else return false;
+}
+
+function checkLegalMoveKnight(pieceId, squareId) {
+    console.log(pieceId[pieceId.length - 1], " ", squareId[squareId.length - 1]);
+    console.log(pieceId[pieceId.length - 2], " ", squareId[squareId.length - 2]);
+    console.log(pieceId[pieceId.length-1]-squareId[squareId.length-1]);
+    console.log(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2));
+    console.log()
+    // row = 1 and column = 2, row = 2 and column = 1 => Knight move
+    if (Math.abs((pieceId[pieceId.length-1] - squareId[squareId.length-1]) * (pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2))) == 2) {
         return true;
     } else return false;
 }
