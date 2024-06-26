@@ -118,6 +118,11 @@ function drop(ev) {
                 console.log("ur queen dumb");
                 return;
             } else break;
+        case "king":
+            if (!checkLegalMoveKing(piece.getAttribute("id"),destinationSquare.getAttribute("id"))) {
+                console.log("ur king dumb");
+                return;
+            } else break;
     }
     
     //check turn prevent error
@@ -187,3 +192,8 @@ function checkLegalMoveKnight(pieceId, squareId) {
     } else return false;
 }
 
+function checkLegalMoveKing(pieceId, squareId) {
+    if (Math.abs((pieceId[pieceId.length-1] - squareId[squareId.length-1])) < 2 && Math.abs(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2)) < 2) {
+        return true;
+    } else return false;
+}
