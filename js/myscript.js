@@ -113,7 +113,11 @@ function drop(ev) {
                 console.log("ur knight dumb");
                 return;
             } else break;
-        
+        case "queen":
+            if (!checkLegalMoveBishop(piece.getAttribute("id"),destinationSquare.getAttribute("id")) && !checkLegalMoveRook(piece.getAttribute("id"), destinationSquare.getAttribute("id"))) {
+                console.log("ur queen dumb");
+                return;
+            } else break;
     }
     
     //check turn prevent error
@@ -182,3 +186,4 @@ function checkLegalMoveKnight(pieceId, squareId) {
         return true;
     } else return false;
 }
+
