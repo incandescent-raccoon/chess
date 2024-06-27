@@ -1,5 +1,6 @@
 let legalSquares = [];
 let isWhiteTurn = true;
+let checkPassant = '';
 const boardSquares = document.getElementsByClassName("square");
 const pieces = document.getElementsByClassName("piece");
 const piecesImages = document.getElementsByTagName("img");
@@ -127,19 +128,22 @@ function drop(ev) {
             if (!checkLegalMovePawn(piece.getAttribute("id"),destinationSquare.getAttribute("id"),piece.getAttribute("color") == "white",destinationSquare)) {
                 console.log("ur pawn dumb");
                 return;
-            } else break;
+            } else {
+                
+                break;
+            }
     }
     
     //check turn prevent error
     
-    console.log(destinationSquare.firstElementChild);
+    //console.log(destinationSquare.firstElementChild);
     //if the square has piece and = color vs the piece moving => dumb 
     if (isSquareOccupied(destinationSquare) == piece.getAttribute("color")) {
         console.log("u dumb");
         return;
     } else {
         let takenPiece = destinationSquare.getElementsByClassName("piece");
-        console.log(takenPiece[0]);
+        //console.log(takenPiece[0]);
         //correct move (either no piece in square or piece with different color)
         if (takenPiece[0]) {
             //which piece take which piece
@@ -163,7 +167,6 @@ function drop(ev) {
 }
 
 function isSquareOccupied(square) {
-    console.log("square:",square);
     if (square.querySelector(".piece")) {
         const color = square.querySelector(".piece").getAttribute("color");
         return color;
@@ -200,7 +203,9 @@ function checkLegalMoveKing(pieceId, squareId) {
         return true;
     } else return false;
 }
+function pawnPassant(pieceId,squareId) {
 
+}
 function checkLegalMovePawn(pieceId, squareId, isWhite, desitionationSquare) {
     //check if the piece is white or black
     if (isWhite) {
@@ -213,36 +218,85 @@ function checkLegalMovePawn(pieceId, squareId, isWhite, desitionationSquare) {
             if (isSquareOccupied(desitionationSquare) != "blank") {
                 return false;
             }
-            //the start leap move of pawn and normal move of pawn
-            if ((pieceId[pieceId.length - 1] == 2 && squareId[squareId.length - 1] == 4) || (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == 1 )) {
+            //the start leap move of pawn
+            if (pieceId[pieceId.length - 1] == 2 && squareId[squareId.length - 1] == 4) {
+                checkPassant = squareId.slice(squareId.length-2);
+                return true;
+            }
+            //normal move of pawn
+            if (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == 1 ) {
                 return true;
             } else return false;
         }
         else {
-            if (isSquareOccupied(desitionationSquare) == "black" && Math.abs((squareId.charCodeAt(squareId.length - 2)) - pieceId.charCodeAt(pieceId.length - 2)) == 1 && (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == 1 )) {
-                return true;
-            } else return false;
+            if (Math.abs((squareId.charCodeAt(squareId.length - 2)) - pieceId.charCodeAt(pieceId.length - 2)) == 1 && (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == 1 )) {
+                //normal capture for pawn
+                if (isSquareOccupied(desitionationSquare) == "black") {
+                    return true;
+                }
+                //en passant move
+                if (squareId[squareId.length-2] == checkPassant[0] && squareId[squareId.length-1] - checkPassant[1] == 1) {
+                    return true;
+                }
+                
+            } 
+            return false;
         }
 
 
     } else {
         //black pawn
         //check if piece is the same column with the desitionation
+        // if (squareId[squareId.length - 2] == pieceId[pieceId.length - 2]) {
+        //     //pawn can't move if blocked
+        //     if (isSquareOccupied(desitionationSquare) != "blank") {
+        //         return false;
+        //     }
+        //     //the start leap move of pawn and normal move of pawn
+        //     if ((pieceId[pieceId.length - 1] == 7 && squareId[squareId.length - 1] == 5) || (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == -1 )) {
+        //         return true;
+        //     } else return false;
+        // }
+        // else {
+        //     //check the X move. Must have opposite piece & only [1,1] next to piece
+        //     if (isSquareOccupied(desitionationSquare) == "white" && Math.abs((squareId.charCodeAt(squareId.length - 2)) - pieceId.charCodeAt(pieceId.length - 2)) == 1 && (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == -1 )) {
+        //         return true;
+        //     } else return false;
+        // }
+
+
+        //black pawn
+        //check if piece is the same column with the desitionation
         if (squareId[squareId.length - 2] == pieceId[pieceId.length - 2]) {
             //pawn can't move if blocked
+            //console.log(squareId[squareId.length-2] + squareId[squareId.length-1]);
+            //console.log(isSquareOccupied(squareId[squareId.length-2] + squareId[squareId.length-1]));
             if (isSquareOccupied(desitionationSquare) != "blank") {
                 return false;
             }
-            //the start leap move of pawn and normal move of pawn
-            if ((pieceId[pieceId.length - 1] == 7 && squareId[squareId.length - 1] == 5) || (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == -1 )) {
+            //the start leap move of pawn
+            if (pieceId[pieceId.length - 1] == 7 && squareId[squareId.length - 1] == 5) {
+                checkPassant = squareId.slice(squareId.length-2);
+                return true;
+            }
+            //normal move of pawn
+            if (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == -1 ) {
                 return true;
             } else return false;
         }
         else {
-            //check the X move. Must have opposite piece & only [1,1] next to piece
-            if (isSquareOccupied(desitionationSquare) == "white" && Math.abs((squareId.charCodeAt(squareId.length - 2)) - pieceId.charCodeAt(pieceId.length - 2)) == 1 && (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == -1 )) {
-                return true;
-            } else return false;
+            if (Math.abs((squareId.charCodeAt(squareId.length - 2)) - pieceId.charCodeAt(pieceId.length - 2)) == 1 && (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == -1 )) {
+                //normal capture for pawn
+                if (isSquareOccupied(desitionationSquare) == "white") {
+                    return true;
+                }
+                //en passant move
+                if (squareId[squareId.length-2] == checkPassant[0] && squareId[squareId.length-1] - checkPassant[1] == 1) {
+                    return true;
+                }
+                
+            } 
+            return false;
         }
     }
 }
