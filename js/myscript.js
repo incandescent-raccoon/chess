@@ -123,6 +123,11 @@ function drop(ev) {
                 console.log("ur king dumb");
                 return;
             } else break;
+        case "pawn":
+            if (!checkLegalMovePawn(piece.getAttribute("id"),destinationSquare.getAttribute("id"),piece.getAttribute("color") == "white",destinationSquare)) {
+                console.log("ur pawn dumb");
+                return;
+            } else break;
     }
     
     //check turn prevent error
@@ -158,6 +163,7 @@ function drop(ev) {
 }
 
 function isSquareOccupied(square) {
+    console.log("square:",square);
     if (square.querySelector(".piece")) {
         const color = square.querySelector(".piece").getAttribute("color");
         return color;
@@ -165,8 +171,6 @@ function isSquareOccupied(square) {
 }
 
 function checkLegalMoveRook(pieceId, squareId) {
-    
-
     if ((pieceId[pieceId.length - 1] == squareId[squareId.length - 1] || pieceId[pieceId.length - 2] == squareId[squareId.length - 2])) {
         return true;
     } else return false;
@@ -185,7 +189,6 @@ function checkLegalMoveBishop(pieceId,squareId) {
 }
 
 function checkLegalMoveKnight(pieceId, squareId) {
-    
     // row = 1 and column = 2, row = 2 and column = 1 => Knight move
     if (Math.abs((pieceId[pieceId.length-1] - squareId[squareId.length-1]) * (pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2))) == 2) {
         return true;
@@ -196,4 +199,50 @@ function checkLegalMoveKing(pieceId, squareId) {
     if (Math.abs((pieceId[pieceId.length-1] - squareId[squareId.length-1])) < 2 && Math.abs(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2)) < 2) {
         return true;
     } else return false;
+}
+
+function checkLegalMovePawn(pieceId, squareId, isWhite, desitionationSquare) {
+    //check if the piece is white or black
+    if (isWhite) {
+        
+        //check if piece is the same column with the desitionation
+        if (squareId[squareId.length - 2] == pieceId[pieceId.length - 2]) {
+            //pawn can't move if blocked
+            //console.log(squareId[squareId.length-2] + squareId[squareId.length-1]);
+            //console.log(isSquareOccupied(squareId[squareId.length-2] + squareId[squareId.length-1]));
+            if (isSquareOccupied(desitionationSquare) != "blank") {
+                return false;
+            }
+            //the start leap move of pawn and normal move of pawn
+            if ((pieceId[pieceId.length - 1] == 2 && squareId[squareId.length - 1] == 4) || (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == 1 )) {
+                return true;
+            } else return false;
+        }
+        else {
+            if (isSquareOccupied(desitionationSquare) == "black" && Math.abs((squareId.charCodeAt(squareId.length - 2)) - pieceId.charCodeAt(pieceId.length - 2)) == 1 && (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == 1 )) {
+                return true;
+            } else return false;
+        }
+
+
+    } else {
+        //black pawn
+        //check if piece is the same column with the desitionation
+        if (squareId[squareId.length - 2] == pieceId[pieceId.length - 2]) {
+            //pawn can't move if blocked
+            if (isSquareOccupied(desitionationSquare) != "blank") {
+                return false;
+            }
+            //the start leap move of pawn and normal move of pawn
+            if ((pieceId[pieceId.length - 1] == 7 && squareId[squareId.length - 1] == 5) || (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == -1 )) {
+                return true;
+            } else return false;
+        }
+        else {
+            //check the X move. Must have opposite piece & only [1,1] next to piece
+            if (isSquareOccupied(desitionationSquare) == "white" && Math.abs((squareId.charCodeAt(squareId.length - 2)) - pieceId.charCodeAt(pieceId.length - 2)) == 1 && (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == -1 )) {
+                return true;
+            } else return false;
+        }
+    }
 }
