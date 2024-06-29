@@ -1,6 +1,7 @@
 let legalSquares = [];
 let isWhiteTurn = true;
 let checkPassant = '';
+let pawnPassanted;
 const boardSquares = document.getElementsByClassName("square");
 const pieces = document.getElementsByClassName("piece");
 const piecesImages = document.getElementsByTagName("img");
@@ -129,7 +130,7 @@ function drop(ev) {
                 console.log("ur pawn dumb");
                 return;
             } else {
-                
+
                 break;
             }
     }
@@ -203,10 +204,23 @@ function checkLegalMoveKing(pieceId, squareId) {
         return true;
     } else return false;
 }
-function pawnPassant(pieceId,squareId) {
 
+function killPassant(destinationSquare) {
+    console.log(destinationSquare);
+    let takenPiece = destinationSquare.getElementsByClassName("piece");
+        //console.log(takenPiece[0]);
+        //correct move (either no piece in square or piece with different color)
+        if (takenPiece[0]) {
+            //which piece take which piece
+            console.log("en passant", isSquareOccupied(destinationSquare));
+            //remove the piece taken
+            //destinationSquare.removeChild(destinationSquare.firstElementChild);
+            destinationSquare.removeChild(takenPiece[0]);
+        }
+        
+        
 }
-function checkLegalMovePawn(pieceId, squareId, isWhite, desitionationSquare) {
+function checkLegalMovePawn(pieceId, squareId, isWhite, destinationSquare) {
     //check if the piece is white or black
     if (isWhite) {
         
@@ -215,11 +229,12 @@ function checkLegalMovePawn(pieceId, squareId, isWhite, desitionationSquare) {
             //pawn can't move if blocked
             //console.log(squareId[squareId.length-2] + squareId[squareId.length-1]);
             //console.log(isSquareOccupied(squareId[squareId.length-2] + squareId[squareId.length-1]));
-            if (isSquareOccupied(desitionationSquare) != "blank") {
+            if (isSquareOccupied(destinationSquare) != "blank") {
                 return false;
             }
             //the start leap move of pawn
             if (pieceId[pieceId.length - 1] == 2 && squareId[squareId.length - 1] == 4) {
+                pawnPassanted = destinationSquare;
                 checkPassant = squareId.slice(squareId.length-2);
                 return true;
             }
@@ -231,11 +246,19 @@ function checkLegalMovePawn(pieceId, squareId, isWhite, desitionationSquare) {
         else {
             if (Math.abs((squareId.charCodeAt(squareId.length - 2)) - pieceId.charCodeAt(pieceId.length - 2)) == 1 && (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == 1 )) {
                 //normal capture for pawn
-                if (isSquareOccupied(desitionationSquare) == "black") {
+                if (isSquareOccupied(destinationSquare) == "black") {
                     return true;
                 }
                 //en passant move
                 if (squareId[squareId.length-2] == checkPassant[0] && squareId[squareId.length-1] - checkPassant[1] == 1) {
+                    //kill the passant piece here
+                    console.log("the e p");
+                    killPassant(pawnPassanted);
+                    // pieces.forEach(pie => {
+                    //     if (pie.id == "pawn" + checkPassant) {
+
+                    //     }
+                    // });
                     return true;
                 }
                 
@@ -271,12 +294,14 @@ function checkLegalMovePawn(pieceId, squareId, isWhite, desitionationSquare) {
             //pawn can't move if blocked
             //console.log(squareId[squareId.length-2] + squareId[squareId.length-1]);
             //console.log(isSquareOccupied(squareId[squareId.length-2] + squareId[squareId.length-1]));
-            if (isSquareOccupied(desitionationSquare) != "blank") {
+            if (isSquareOccupied(destinationSquare) != "blank") {
                 return false;
             }
             //the start leap move of pawn
             if (pieceId[pieceId.length - 1] == 7 && squareId[squareId.length - 1] == 5) {
                 checkPassant = squareId.slice(squareId.length-2);
+                pawnPassanted = destinationSquare;
+
                 return true;
             }
             //normal move of pawn
@@ -287,11 +312,15 @@ function checkLegalMovePawn(pieceId, squareId, isWhite, desitionationSquare) {
         else {
             if (Math.abs((squareId.charCodeAt(squareId.length - 2)) - pieceId.charCodeAt(pieceId.length - 2)) == 1 && (squareId[squareId.length - 1] - pieceId[pieceId.length - 1] == -1 )) {
                 //normal capture for pawn
-                if (isSquareOccupied(desitionationSquare) == "white") {
+                if (isSquareOccupied(destinationSquare) == "white") {
                     return true;
                 }
                 //en passant move
-                if (squareId[squareId.length-2] == checkPassant[0] && squareId[squareId.length-1] - checkPassant[1] == 1) {
+                if (squareId[squareId.length-2] == checkPassant[0] && squareId[squareId.length-1] - checkPassant[1] == -1) {
+                    console.log("the e p");
+                    
+                    killPassant(pawnPassanted);
+                    
                     return true;
                 }
                 
