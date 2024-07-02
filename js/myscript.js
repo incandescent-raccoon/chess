@@ -2,12 +2,14 @@ let legalSquares = [];
 let isWhiteTurn = true;
 let checkPassant = '';
 let pawnPassanted;
+let squareOccuppied = [];
 const boardSquares = document.getElementsByClassName("square");
 const pieces = document.getElementsByClassName("piece");
 const piecesImages = document.getElementsByTagName("img");
 
 setupBoardSquares();
 setupPieces();
+
 
 function setupBoardSquares() {
     for (let i  = 0; i < boardSquares.length; i++) {
@@ -28,6 +30,8 @@ function setupPieces() {
         //add event listener to every pieces to be draggable
         pieces[i].addEventListener("dragstart", drag);
         pieces[i].setAttribute("draggable", true);
+        //add id to square array to control which piece where.
+        squareOccuppied.push(pieces[i].parentElement.id);
         //setup pieces Id. 
 
         pieces[i].id = pieces[i].className.split(" ")[1] + pieces[i].parentElement.id;
@@ -143,6 +147,7 @@ function drop(ev) {
         console.log("u dumb");
         return;
     } else {
+        console.log(piece.parentElement.id);
         let takenPiece = destinationSquare.getElementsByClassName("piece");
         //console.log(takenPiece[0]);
         //correct move (either no piece in square or piece with different color)
@@ -153,6 +158,16 @@ function drop(ev) {
             //destinationSquare.removeChild(destinationSquare.firstElementChild);
             destinationSquare.removeChild(takenPiece[0]);
         }
+        //remove postion from squareOccupied (track which position on board has pieces).
+        //No need to add in the delete phase. There will always pieces there
+        squareOccuppied.splice(squareOccuppied.indexOf(piece.parentElement.id),1);
+        //push new position in squareOccupied.
+        squareOccuppied.push(destinationSquare.getAttribute("id"));
+        console.log(squareOccuppied);
+
+        //console.log(destinationSquare.getAttribute("id"));
+        //squareOccuppied.push();
+
         //put the other piece into the square
         destinationSquare.appendChild(piece);
         
@@ -175,7 +190,39 @@ function isSquareOccupied(square) {
 }
 
 function checkLegalMoveRook(pieceId, squareId) {
-    if ((pieceId[pieceId.length - 1] == squareId[squareId.length - 1] || pieceId[pieceId.length - 2] == squareId[squareId.length - 2])) {
+    if (pieceId[pieceId.length - 1] == squareId[squareId.length - 1]) {
+        if (squareId.charCodeAt(squareId.length - 2) > pieceId.charCodeAt(pieceId.length - 2)) {
+            for (let i = +pieceId.charCodeAt(pieceId.length - 2) + 1; i < squareId.charCodeAt(squareId.length - 2); i++) {
+                if (squareOccuppied.includes(String.fromCharCode(i) + pieceId[pieceId.length - 1])) {
+                    return false;
+                }
+            }
+        } else {
+            for (let i = +pieceId.charCodeAt(pieceId.length - 2) - 1; i > squareId.charCodeAt(squareId.length - 2); i--) {
+                if (squareOccuppied.includes(String.fromCharCode(i) + pieceId[pieceId.length - 1])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    } else if (pieceId[pieceId.length - 2] == squareId[squareId.length - 2]) {
+        // if destination > position do this loop or reverse loop
+        if (squareId[squareId.length - 1] > pieceId[pieceId.length - 1]) {
+            for (let i = +pieceId[pieceId.length - 1] + 1; i < squareId[squareId.length-1]; i++) {
+                console.log(squareId[squareId.length - 2] + i);
+                //check if there is piece between position and destination
+                if(squareOccuppied.includes(squareId[squareId.length - 2] + i)) {
+                    return false;
+                }
+            }
+        } else {
+            for (let i = +pieceId[pieceId.length - 1] - 1 ; i > squareId[squareId.length-1]; i--) {
+                //check if there is piece between position and destination
+                if(squareOccuppied.includes(squareId[squareId.length - 2] + i)) {
+                    return false;
+                }
+            }
+        }
         return true;
     } else return false;
 }
@@ -207,15 +254,14 @@ function checkLegalMoveKing(pieceId, squareId) {
 
 function killPassant(destinationSquare) {
     console.log(destinationSquare);
-    let takenPiece = destinationSquare.getElementsByClassName("piece");
         //console.log(takenPiece[0]);
         //correct move (either no piece in square or piece with different color)
-        if (takenPiece[0]) {
+        if (destinationSquare.getElementsByClassName("piece")[0]) {
             //which piece take which piece
             console.log("en passant", isSquareOccupied(destinationSquare));
             //remove the piece taken
             //destinationSquare.removeChild(destinationSquare.firstElementChild);
-            destinationSquare.removeChild(takenPiece[0]);
+            destinationSquare.removeChild(destinationSquare.getElementsByClassName("piece")[0]);
         }
         
         
@@ -328,4 +374,8 @@ function checkLegalMovePawn(pieceId, squareId, isWhite, destinationSquare) {
             return false;
         }
     }
+}
+
+function checkLegalMove(pieceId, squareId) {
+
 }
