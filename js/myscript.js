@@ -108,27 +108,42 @@ function drop(ev) {
             if (!checkLegalMoveRook(piece.getAttribute("id"), destinationSquare.getAttribute("id"))) {
                 console.log("ur rook dumb"); 
                 return;
-            } else break;
+            } else {
+                checkPassant = null;
+                break;
+            }
         case "bishop":
             if (!checkLegalMoveBishop(piece.getAttribute("id"), destinationSquare.getAttribute("id"))) {
                 console.log("ur bishop dumb"); 
                 return;
-            } else break;
+            } else {
+                checkPassant = null;
+                break;
+            }
         case "knight":
             if (!checkLegalMoveKnight(piece.getAttribute("id"),destinationSquare.getAttribute("id"))) {
                 console.log("ur knight dumb");
                 return;
-            } else break;
+            } else {
+                checkPassant = null;
+                break;
+            }
         case "queen":
             if (!checkLegalMoveBishop(piece.getAttribute("id"),destinationSquare.getAttribute("id")) && !checkLegalMoveRook(piece.getAttribute("id"), destinationSquare.getAttribute("id"))) {
                 console.log("ur queen dumb");
                 return;
-            } else break;
+            } else {
+                checkPassant = null;
+                break;
+            }
         case "king":
             if (!checkLegalMoveKing(piece.getAttribute("id"),destinationSquare.getAttribute("id"))) {
                 console.log("ur king dumb");
                 return;
-            } else break;
+            } else {
+                checkPassant = null;
+                break;
+            }
         case "pawn":
             if (!checkLegalMovePawn(piece.getAttribute("id"),destinationSquare.getAttribute("id"),piece.getAttribute("color") == "white",destinationSquare)) {
                 console.log("ur pawn dumb");
@@ -379,3 +394,4 @@ function checkLegalMovePawn(pieceId, squareId, isWhite, destinationSquare) {
 function checkLegalMove(pieceId, squareId) {
 
 }
+
