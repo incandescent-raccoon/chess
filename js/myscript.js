@@ -250,6 +250,67 @@ function checkLegalMoveBishop(pieceId,squareId) {
     // console.log(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2));
 
     if (Math.abs(pieceId[pieceId.length-1]-squareId[squareId.length-1]) == Math.abs(pieceId.charCodeAt(pieceId.length-2) - squareId.charCodeAt(squareId.length-2))) {
+        console.log("1");
+        if (Math.abs(pieceId[pieceId.length-1]-squareId[squareId.length-1]) == 1) return true;
+        console.log("2");
+
+        if (pieceId[pieceId.length - 1] < squareId[squareId.length - 1]) {
+            console.log("3");
+
+            if (pieceId.charCodeAt(pieceId.length - 2) > squareId.charCodeAt(squareId.length - 2)) {
+                let i = +squareId[squareId.length - 1] - 1; 
+                let j = squareId.charCodeAt(squareId.length - 2) + 1;
+
+                while (i != pieceId[pieceId.length - 1]) {
+                    console.log(String.fromCharCode(j) + i);
+                    if (squareOccuppied.includes(String.fromCharCode(j) + i)) return false;
+                    i--;
+                    j++;
+                }
+                return true;
+            } else {
+                let i = +squareId[squareId.length - 1] - 1; 
+                let j = squareId.charCodeAt(squareId.length - 2) - 1;
+
+                while (i != pieceId[pieceId.length - 1]) {
+                    console.log(String.fromCharCode(j) + i);
+                    if (squareOccuppied.includes(String.fromCharCode(j) + i)) return false;
+                    i--;
+                    j--;
+                }
+                return true;
+            }
+
+        } else {
+            if (pieceId.charCodeAt(pieceId.length - 2) > squareId.charCodeAt(squareId.length - 2)) {
+            console.log("4");
+
+                let i = +squareId[squareId.length - 1] + 1; 
+                console.log(i);
+                
+                let j = squareId.charCodeAt(squareId.length - 2) + 1;
+
+                while (i != pieceId[pieceId.length - 1]) {
+                    console.log(String.fromCharCode(j) + i);
+                    if (squareOccuppied.includes(String.fromCharCode(j) + i)) return false;
+                    i++;
+                    j++;
+                }
+                return true;
+            } else {
+                let i = +squareId[squareId.length - 1] + 1; 
+                console.log(i);
+                let j = squareId.charCodeAt(squareId.length - 2) - 1;
+
+                while (i != pieceId[pieceId.length - 1]) {
+                    console.log(String.fromCharCode(j) + i);
+                    if (squareOccuppied.includes(String.fromCharCode(j) + i)) return false;
+                    i++;
+                    j--;
+                }
+                return true;
+            }
+        }
         return true;
     } else return false;
 }
