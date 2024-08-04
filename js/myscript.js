@@ -1,4 +1,5 @@
 let legalSquares = [];
+let pawnPromote = false;
 let isWhiteTurn = true;
 let checkPassant = '';
 let pawnPassanted;
@@ -149,7 +150,7 @@ function drop(ev) {
                 console.log("ur pawn dumb");
                 return;
             } else {
-
+                
                 break;
             }
     }
@@ -185,7 +186,11 @@ function drop(ev) {
 
         //put the other piece into the square
         destinationSquare.appendChild(piece);
-        
+        if (pawnPromote) {
+            console.log("Promote!");
+            pawnPromote = false;
+        } 
+    
         pieceType += destinationSquare.getAttribute("id");
         //pieceId after moving
         piece.setAttribute("id",pieceType);
@@ -345,6 +350,12 @@ function killPassant(destinationSquare) {
 function checkLegalMovePawn(pieceId, squareId, isWhite, destinationSquare) {
     //check if the piece is white or black
     if (isWhite) {
+        //check if promote white
+
+        if (squareId[squareId.length - 1] == 8) {
+            pawnPromote = true;
+            
+        } else pawnPromote = false;
         
         //check if piece is the same column with the desitionation
         if (squareId[squareId.length - 2] == pieceId[pieceId.length - 2]) {
@@ -391,6 +402,11 @@ function checkLegalMovePawn(pieceId, squareId, isWhite, destinationSquare) {
 
     } else {
         //black pawn
+        //check if promote black
+        if (squareId[squareId.length - 1] == 1) {
+            pawnPromote = true;
+            
+        } else pawnPromote = false;
         //check if piece is the same column with the desitionation
         // if (squareId[squareId.length - 2] == pieceId[pieceId.length - 2]) {
         //     //pawn can't move if blocked
